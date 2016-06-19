@@ -10,9 +10,9 @@ $(document).ready(doStuff);
 
 function doStuff() {
     ReactDOM.render(<App
-                    width ={6}
-                    height={6}
-                    mineCoverage={0.1}
+                    width ={8}
+                    height={8}
+                    mineCoverage={0.15}
                     />
                     , $('#app')[0]);
 

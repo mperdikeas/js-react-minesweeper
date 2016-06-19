@@ -27,9 +27,13 @@ const GameEndMsg = function (props) {
             lineA =  'you succesfully cleared the field';
         else {
             if (uncoveredMines>0)
-                lineA = `${uncoveredMines} mines were left uncovered`;
+                lineA = `${uncoveredMines} mines were left unmarked`;
             if (wrongPlacedMines>0)
                 lineB = `${wrongPlacedMines} flags were wrongly placed`;
+            if (lineA == null) {
+                lineA = lineB;
+                lineB = 'Your are considered overly cautious';
+            }
         }
     }
     return (
