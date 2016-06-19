@@ -1,0 +1,20 @@
+body {
+    background: #dddddd;
+}
+
+button {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    background-color: limegreen;
+    color: white;
+    font-weight: bold;
+    padding: 0.5em;    
+}
+#btn-done-ng {
+
+}
+
+#btn-toggle {
+
+}

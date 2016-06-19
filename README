@@ -1,0 +1,5 @@
+Steps to run the demo:
+[1] npm install 
+[2] npm run build 
+[3] npm run dev
+[4] connect to http://localhost:8090

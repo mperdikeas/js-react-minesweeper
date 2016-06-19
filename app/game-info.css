@@ -1,0 +1,26 @@
+span {
+    font-size: 110%;
+
+}
+
+#mld {
+    margin-left: 1em;
+    background: black;
+    color: lime;
+    font-weight: bold;
+    padding: 0 1em 0 1em;
+    font-family: monospace;
+}
+
+#tl {
+    margin-left: 1em;
+}
+
+#tld {
+    margin-left: 1em;
+    background: black;
+    color: lime;
+    font-weight: bold;
+    padding: 0 1em 0 1em;
+    font-family: monospace;    
+}
