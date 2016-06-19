@@ -5,13 +5,15 @@ const utils = require('./scripts/util.js');
 const     $ = require('jquery');
 const React = require('react');
 var      cx = require('classnames');
-import assert from 'assert';
-import {CellState, CellCoord} from './cell.js';
-import {CELL_SIZE}   from './constants.js';
-import GameInfo      from './game-info.js';
-import MinefieldDumb from './minefield-dumb.js';
-import GameState     from './game-state.js';
-import GameEndMsg    from './game-end-message.js';
+import assert                                    from 'assert';
+import {CellState, CellCoord}                    from './cell.js';
+import {CELL_SIZE, UNICODE_NON_BREAKING_SPACE}   from './constants.js';
+import GameInfo                                  from './game-info.js';
+import MinefieldDumb                             from './minefield-dumb.js';
+import GameState                                 from './game-state.js';
+import GameEndMsg                                from './game-end-message.js';
+import TwoLiner                                  from './two-liner.js';
+
 
 function initialLayOfLand(H, W) {
    const rv = [];
@@ -176,12 +178,17 @@ const App = React.createClass({
     showLastState() {
         assert(this.state.lastStateOnTheGround);
         assert(this.state.gameState===GameState.RESULTS);
-        this.setState({land: this.state.lastStateOnTheGround, lastStateOnTheGround: this.state.land});
+        this.setState({gameState: GameState.REVEAL_LAST,
+                       land: this.state.lastStateOnTheGround,
+                       lastStateOnTheGround: this.state.land});
     },
     revertLastState() {
         assert(this.state.lastStateOnTheGround);
-        assert(this.state.gameState===GameState.RESULTS);
-        this.setState({land: this.state.lastStateOnTheGround, lastStateOnTheGround: this.state.land});        
+        assert(this.state.gameState===GameState.REVEAL_LAST);
+        this.setState({
+            gameState: GameState.RESULTS,
+            land: this.state.lastStateOnTheGround,
+            lastStateOnTheGround: this.state.land});        
     },
     render: function() {
         const gameInfo = (()=>{
@@ -194,11 +201,18 @@ const App = React.createClass({
                             timeOver={this.timeOver}
                         />
                 );
-                case GameState.RESULTS:
+            case GameState.RESULTS:
                 return (
                         <GameEndMsg
                             land={this.state.land}
                         />
+                );
+            case GameState.REVEAL_LAST:                
+                return (
+                    <TwoLiner
+                        lineA = {UNICODE_NON_BREAKING_SPACE}
+                        lineB = {UNICODE_NON_BREAKING_SPACE}
+                    />
                 );
             default:
                 throw new Error();
@@ -209,6 +223,7 @@ const App = React.createClass({
             case GameState.RUNNING:
                 return (<button id='btn-done-ng' onClick={this.done}>I'm done!</button>);
             case GameState.RESULTS:
+            case GameState.REVEAL_LAST:
                 return (<button id='btn-done-ng' onClick={this.newGame}>New game</button>);
             default:
             throw new Error();
@@ -217,13 +232,14 @@ const App = React.createClass({
         const toggleLastStateButton = (()=>{
         switch (this.state.gameState) {
             case GameState.RESULTS:
+            case GameState.REVEAL_LAST:
                 return (
                     <button id='btn-toggle' onMouseDown={this.showLastState} onMouseUp={this.revertLastState}>
                         reveal last state
                     </button>
                 );
-            default:
-                return null;
+                default:
+                    return null;
             }
         })();
         return (

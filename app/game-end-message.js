@@ -1,20 +1,11 @@
 const React = require('react');
 import assert from 'assert';
 import {CellState} from './cell.js';
-
-const TwoLiner = (props) => {
-    return (
-        <div>
-            {props.lineA}
-            <br/>
-            {props.lineB}            
-        </div>
-    );
-};
-
+import TwoLiner from './two-liner.js';
+import {UNICODE_NON_BREAKING_SPACE} from './constants.js';
 
 const GameEndMsg = function (props) {
-    const UNICODE_NON_BREAKING_SPACE = "\u00a0";
+
     let lineA, lineB = UNICODE_NON_BREAKING_SPACE;
     if (_.filter([].concat.apply([], props.land), (x)=>x===CellState.BOMB_FATALITY).length>0) {
         assert(_.filter([].concat.apply([], props.land), (x)=>x===CellState.BOMB_FATALITY).length==1);
