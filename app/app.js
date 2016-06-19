@@ -186,7 +186,7 @@ const App = React.createClass({
             (new Howl({
                 urls: ['flag-flapping.mp3'],
                 sprite: {
-                    flag: [0, 2000]
+                    flag: [300, 600]
                 }
             })).play('flag');                        
             newLand[where.i][where.j]=CellState.UNKNOWN;
