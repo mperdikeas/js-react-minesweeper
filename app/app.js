@@ -177,7 +177,7 @@ const App = React.createClass({
             (new Howl({
                 urls: ['flag-hammering.mp3'],
                 sprite: {
-                    flag: [400, 1000]
+                    flag: [700, 200]
                 }
             })).play('flag');            
             newLand[where.i][where.j]=CellState.FLAG;
