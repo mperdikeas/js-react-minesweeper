@@ -36,6 +36,7 @@ const GameInfo = React.createClass({
                 <div>
                 <span id='ml' >Mines left: </span>
                 <span id='mld'>{this.props.minesLeft}</span>
+                <br/>
                 <span id='tl' >Time left: </span>
                 <span id='tld'>{this.state.secsLeft}</span>
                 </div>

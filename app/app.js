@@ -11,6 +11,7 @@ import {CELL_SIZE}   from './constants.js';
 import GameInfo      from './game-info.js';
 import MinefieldDumb from './minefield-dumb.js';
 import GameState     from './game-state.js';
+import GameEndMsg    from './game-end-message.js';
 
 function initialLayOfLand(H, W) {
    const rv = [];
@@ -182,19 +183,6 @@ const App = React.createClass({
         assert(this.state.gameState===GameState.RESULTS);
         this.setState({land: this.state.lastStateOnTheGround, lastStateOnTheGround: this.state.land});        
     },
-    clearenceMsg: function() {
-        const uncoveredMines = 
-                  _.filter([].concat.apply([], this.state.land), (x)=>x===CellState.BOMB_UNCOVERED).length;
-        const wrongPlacedMines = 
-                  _.filter([].concat.apply([], this.state.land), (x)=>x===CellState.BOMB_WRONGPLACE).length;
-        if ((uncoveredMines===0) && (wrongPlacedMines===0)) return 'you succesfully cleared the field';
-        const failMsgs = [];
-        if (uncoveredMines>0)
-            failMsgs.push(`${uncoveredMines} mines were left uncovered`);
-        if (wrongPlacedMines>0)
-            failMsgs.push(`${wrongPlacedMines} flags were wrongly placed`);
-        return failMsgs.join(', ');
-    },
     render: function() {
         const gameInfo = (()=>{
             switch (this.state.gameState) {
@@ -207,13 +195,11 @@ const App = React.createClass({
                         />
                 );
                 case GameState.RESULTS:
-                let msg;            
-                if (this.state.fatality)
-                    msg = 'You leave a hideous corpse but you otherwise die painlessly';
-                else {
-                    msg = this.clearenceMsg();
-                }
-                return (<div>{msg}</div>);
+                return (
+                        <GameEndMsg
+                            land={this.state.land}
+                        />
+                );
             default:
                 throw new Error();
             }
