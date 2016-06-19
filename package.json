@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "build"    : "webpack --progress --colors",
-      "build-min": "webpack --config=webpack.min.config.js",
-      "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build --port 8090"
+    "build": "webpack --progress --colors",
+    "build-min": "webpack --config=webpack.min.config.js",
+    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build --port 8090"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
   "dependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "classnames": "^2.2.5",
+    "howler": "^1.1.29",
     "jquery": "^2.2.2",
     "lodash": "^4.6.1",
     "react": "^0.14.7",

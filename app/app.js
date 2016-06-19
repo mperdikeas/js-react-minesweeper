@@ -5,7 +5,9 @@ const utils = require('./scripts/util.js');
 const     $ = require('jquery');
 const React = require('react');
 var      cx = require('classnames');
+import {Howl}                                    from 'howler';
 import assert                                    from 'assert';
+
 import {CellState, CellCoord}                    from './cell.js';
 import {CELL_SIZE, UNICODE_NON_BREAKING_SPACE}   from './constants.js';
 import GameInfo                                  from './game-info.js';
@@ -134,8 +136,23 @@ const App = React.createClass({
         this.setState(this.getInitialState());
     },
     dig(where) {
+        (new Howl({
+            urls: ['digging.mp3'],
+            sprite: {
+                digging: [450, 500]
+            }
+        })).play('digging');
+
+
         const newLand = clone2DArr(this.state.land);
         if (this.state.mines[where.i][where.j]) {
+            (new Howl({
+                urls: ['bomb.mp3'],
+                sprite: {
+                    bomb: [0, 2000]
+                }
+            })).play('bomb');
+            
             this.presentSolution(where);
         } else {
             const numOfMinesNearby = minesNearby(this.state.mines, where);
@@ -156,11 +173,24 @@ const App = React.createClass({
     },
     toggleFlag(where) {
         const newLand = clone2DArr(this.state.land);
-        if (newLand[where.i][where.j]===CellState.UNKNOWN)
+        if (newLand[where.i][where.j]===CellState.UNKNOWN) {
+            (new Howl({
+                urls: ['flag-hammering.mp3'],
+                sprite: {
+                    flag: [400, 1000]
+                }
+            })).play('flag');            
             newLand[where.i][where.j]=CellState.FLAG;
-        else if (newLand[where.i][where.j]===CellState.FLAG)
+        }
+        else if (newLand[where.i][where.j]===CellState.FLAG) {
+            (new Howl({
+                urls: ['flag-flapping.mp3'],
+                sprite: {
+                    flag: [0, 2000]
+                }
+            })).play('flag');                        
             newLand[where.i][where.j]=CellState.UNKNOWN;
-        else
+        } else
             console.log('you cant flag here'); // this has to be recorded at a message
         this.setState({land: newLand});
     },
