@@ -7,7 +7,7 @@ const React = require('react');
 var      cx = require('classnames');
 import {Howl}                                    from 'howler';
 import assert                                    from 'assert';
-
+import TimerMixin    from 'react-timer-mixin';
 import {CellState, CellCoord}                    from './cell.js';
 import {CELL_SIZE, UNICODE_NON_BREAKING_SPACE}   from './constants.js';
 import GameInfo                                  from './game-info.js';
@@ -68,11 +68,34 @@ const App = React.createClass({
         mineCoverage: React.PropTypes.number.isRequired,
         secsAllowed:  React.PropTypes.number.isRequired
     },
+    mixins: [TimerMixin],
+    componentDidMount() {
+        this.startTimer();
+    },
+    startTimer() {
+        const intervalId = this.setInterval(
+            () => {
+                if (this.state.secsLeft>0)
+                    this.setState({secsLeft: this.state.secsLeft-1});
+                else {
+                    this.props.timeOver();
+                    pauseTimer();
+                }
+            }
+            ,1000
+        );
+        this.setState({intervalId: intervalId});
+    },
+    pauseTimer() {
+        clearInterval(this.state.intervalId);        
+    },
     getInitialState() {
         return {
             mines: plantMines(this.props.height, this.props.width, this.props.mineCoverage),
             land: initialLayOfLand(this.props.height, this.props.width),
-            gameState: GameState.RUNNING
+            gameState: GameState.RUNNING,
+            secsLeft: this.props.secsAllowed,
+            intervalId: null            
         };
     },
     coordsThatCanBeSafelyDug(land, where) {
@@ -222,10 +245,12 @@ const App = React.createClass({
             lastStateOnTheGround: this.state.land});        
     },
     showHelp() {
+        this.pauseTimer();
         this.setState({gameState: GameState.HELP});
     },
     dismissHelp() {
         this.setState({gameState: GameState.RUNNING});
+        this.startTimer();
     },
     render: function() {
         const gameInfo = (()=>{
@@ -236,6 +261,7 @@ const App = React.createClass({
                             minesLeft={this.minesLeft()}
                             secsAllowed={this.props.secsAllowed}
                             timeOver={this.timeOver}
+                            secsLeft={this.state.secsLeft}
                         />
                 );
             case GameState.RESULTS:

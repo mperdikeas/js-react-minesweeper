@@ -5,31 +5,12 @@ const     $ = require('jquery');
 const React = require('react');
 var      cx = require('classnames');
 import assert from 'assert';
-import TimerMixin    from 'react-timer-mixin';
+
 
 const GameInfo = React.createClass({
     propTypes: {
         minesLeft  : React.PropTypes.number.isRequired,
-        secsAllowed: React.PropTypes.number.isRequired,
-        timeOver   : React.PropTypes.func  .isRequired
-    },
-    mixins: [TimerMixin],
-    componentDidMount() {
-        const intervalId = this.setInterval(
-            () => {
-                if (this.state.secsLeft>0)
-                    this.setState({secsLeft: this.state.secsLeft-1});
-                else {
-                    this.props.timeOver();
-                    clearInterval(this.state.intervalId);
-                }
-            }
-            ,1000
-        );
-        this.setState({intervalId: intervalId});
-    },
-    getInitialState() {
-        return {secsLeft: this.props.secsAllowed, intervalId: null};
+        secsLeft: React.PropTypes.number.isRequired
     },
     render: function() {
         return (
@@ -38,7 +19,7 @@ const GameInfo = React.createClass({
                 <span id='mld'>{this.props.minesLeft}</span>
                 <br/>
                 <span id='tl' >Time left: </span>
-                <span id='tld'>{this.state.secsLeft}</span>
+                <span id='tld'>{this.props.secsLeft}</span>
                 </div>
         );
     }
