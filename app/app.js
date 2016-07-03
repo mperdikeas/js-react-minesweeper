@@ -79,7 +79,7 @@ const App = React.createClass({
                     this.setState({secsLeft: this.state.secsLeft-1});
                 else {
                     this.props.timeOver();
-                    pauseTimer();
+                    this.pauseTimer();
                 }
             }
             ,1000
@@ -87,7 +87,7 @@ const App = React.createClass({
         this.setState({intervalId: intervalId});
     },
     pauseTimer() {
-        clearInterval(this.state.intervalId);        
+        this.clearInterval(this.state.intervalId);        
     },
     getInitialState() {
         return {
@@ -158,6 +158,7 @@ const App = React.createClass({
     },
     newGame() {
         this.setState(this.getInitialState());
+        this.startTimer();
     },
     dig(where) {
         (new Howl({
@@ -253,6 +254,9 @@ const App = React.createClass({
         this.startTimer();
     },
     render: function() {
+        if (this.state.gameState!=GameState.RUNNING) {
+            this.pauseTimer();
+        }
         const gameInfo = (()=>{
             switch (this.state.gameState) {
                 case GameState.RUNNING:
