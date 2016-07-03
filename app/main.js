@@ -12,7 +12,8 @@ function doStuff() {
     ReactDOM.render(<App
                     width ={8}
                     height={8}
-                    mineCoverage={0.15}
+                    mineCoverage={0.08}
+                    secsAllowed={60}
                     />
                     , $('#app')[0]);
 

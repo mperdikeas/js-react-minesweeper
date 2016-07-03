@@ -65,7 +65,8 @@ const App = React.createClass({
     propTypes: {
         width : React.PropTypes.number.isRequired,
         height: React.PropTypes.number.isRequired,
-        mineCoverage: React.PropTypes.number.isRequired
+        mineCoverage: React.PropTypes.number.isRequired,
+        secsAllowed:  React.PropTypes.number.isRequired
     },
     getInitialState() {
         return {
@@ -220,6 +221,12 @@ const App = React.createClass({
             land: this.state.lastStateOnTheGround,
             lastStateOnTheGround: this.state.land});        
     },
+    showHelp() {
+        this.setState({gameState: GameState.HELP});
+    },
+    dismissHelp() {
+        this.setState({gameState: GameState.RUNNING});
+    },
     render: function() {
         const gameInfo = (()=>{
             switch (this.state.gameState) {
@@ -227,7 +234,7 @@ const App = React.createClass({
                 return (
                         <GameInfo
                             minesLeft={this.minesLeft()}
-                            secsAllowed={120}
+                            secsAllowed={this.props.secsAllowed}
                             timeOver={this.timeOver}
                         />
                 );
@@ -244,6 +251,8 @@ const App = React.createClass({
                         lineB = {UNICODE_NON_BREAKING_SPACE}
                     />
                 );
+            case GameState.HELP:
+                return (<div>Bug if you see this</div>);
             default:
                 throw new Error();
             }
@@ -255,6 +264,8 @@ const App = React.createClass({
             case GameState.RESULTS:
             case GameState.REVEAL_LAST:
                 return (<button id='btn-done-ng' onClick={this.newGame}>New game</button>);
+            case GameState.HELP:
+                return (<div>Bug if you see this</div>);
             default:
             throw new Error();
             }
@@ -268,10 +279,37 @@ const App = React.createClass({
                         reveal last state
                     </button>
                 );
-                default:
-                    return null;
+            case GameState.HELP:
+                return (<div>Bug if you see this</div>);
+            default:
+                return null;
             }
         })();
+        const help = (()=> {
+        switch (this.state.gameState) {
+            case GameState.RUNNING:
+                return (
+                        <div>
+                            <button id='btn-help' onClick={this.showHelp}>
+                                help
+                            </button>
+                        </div>
+                );
+            default:
+                return null;
+            }
+        })();
+const helpContents = (
+<div id='help-contents'>
+<b>Left click</b> to dig
+<p><b>Right click</b> to mark / unmark</p>
+<p>Go dig!</p>
+<button id={'btn-dismiss-help'} onClick={this.dismissHelp}>Got it!</button>
+</div>
+);
+        if (this.state.gameState===GameState.HELP)
+            return helpContents;
+        else
         return (
                 <div>
                 {gameInfo}
@@ -281,6 +319,7 @@ const App = React.createClass({
                     toggleFlag = {this.toggleFlag}
                 />
                 {button}{toggleLastStateButton}
+                {help}
                 </div>                
         );
     }
